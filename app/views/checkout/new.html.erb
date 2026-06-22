@@ -1,0 +1,37 @@
+<% content_for :title, "Checkout" %>
+
+<h1 class="page-title">Finalizar compra</h1>
+
+<div class="cart-layout">
+  <div class="panel">
+    <%= form_with model: @order, url: checkout_path do |form| %>
+      <% if @order.errors.any? %>
+        <div class="form-error">
+          Verifique os campos: <%= @order.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
+
+      <div class="field">
+        <%= form.label :customer_name, "Nome completo" %>
+        <%= form.text_field :customer_name, placeholder: "Quem vai receber" %>
+      </div>
+      <div class="field">
+        <%= form.label :shipping_address, "Endereço de entrega" %>
+        <%= form.textarea :shipping_address, placeholder: "Rua, número, cidade, CEP" %>
+      </div>
+
+      <%= form.submit "Confirmar pedido", class: "btn block" %>
+    <% end %>
+  </div>
+
+  <aside class="summary">
+    <h3>Seu pedido</h3>
+    <% @cart.cart_items.includes(:product).each do |item| %>
+      <div class="line">
+        <span><%= item.quantity %>× <%= truncate(item.product.name, length: 22) %></span>
+        <span><%= item.subtotal_brl %></span>
+      </div>
+    <% end %>
+    <div class="total"><span>Total</span><span><%= @cart.total_brl %></span></div>
+  </aside>
+</div>

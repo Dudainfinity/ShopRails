@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Shoprails" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Shoprails">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <nav class="nav">
+      <%= link_to root_path, class: "brand" do %>Shop<span>Rails</span><% end %>
+      <div class="nav-actions">
+        <% if authenticated? %>
+          <%= link_to "Meus pedidos", orders_path %>
+          <span class="who"><%= Current.user.email_address %></span>
+          <%= button_to "Sair", session_path, method: :delete, class: "btn ghost small" %>
+        <% else %>
+          <%= link_to "Entrar", new_session_path %>
+          <%= link_to "Criar conta", new_registration_path %>
+        <% end %>
+        <%= link_to cart_path, class: "cart-link" do %>
+          Carrinho
+          <span class="cart-count"><%= current_cart.total_items %></span>
+        <% end %>
+      </div>
+    </nav>
+
+    <% flash.each do |type, message| %>
+      <div class="flash <%= type == "notice" ? "notice" : "alert" %>"><%= message %></div>
+    <% end %>
+
+    <main class="wrap">
+      <%= yield %>
+    </main>
+  </body>
+</html>

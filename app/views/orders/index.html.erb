@@ -1,0 +1,29 @@
+<% content_for :title, "Meus pedidos" %>
+
+<h1 class="page-title">Meus pedidos</h1>
+
+<% if @orders.any? %>
+  <div class="panel">
+    <table class="order-table">
+      <thead>
+        <tr><th>Pedido</th><th>Data</th><th class="num">Itens</th><th class="num">Total</th><th></th></tr>
+      </thead>
+      <tbody>
+        <% @orders.each do |order| %>
+          <tr>
+            <td>#<%= order.id %></td>
+            <td><%= order.created_at.strftime("%d/%m/%Y") %></td>
+            <td class="num"><%= order.total_items %></td>
+            <td class="num"><%= order.total_brl %></td>
+            <td class="num"><%= link_to "Ver", order_path(order) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="empty-state">
+    <h2>Você ainda não fez pedidos</h2>
+    <%= link_to "Ir às compras", root_path, class: "btn" %>
+  </div>
+<% end %>

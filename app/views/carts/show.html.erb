@@ -1,0 +1,43 @@
+<% content_for :title, "Seu carrinho" %>
+
+<h1 class="page-title">Seu carrinho</h1>
+
+<% if @cart.empty? %>
+  <div class="empty-state">
+    <h2>Seu carrinho está vazio</h2>
+    <p>Explore a loja e adicione produtos.</p>
+    <%= link_to "Ir às compras", root_path, class: "btn" %>
+  </div>
+<% else %>
+  <div class="cart-layout">
+    <div class="cart-items">
+      <% @cart_items.each do |item| %>
+        <div class="cart-row">
+          <%= product_image(item.product, css_class: "thumb") %>
+          <div>
+            <div class="name"><%= link_to item.product.name, product_path(item.product) %></div>
+            <div class="unit"><%= item.product.price_brl %> cada</div>
+            <%= form_with url: cart_item_path(item), method: :patch, class: "qty-form" do |f| %>
+              <%= f.number_field :quantity, value: item.quantity, min: 0 %>
+              <%= f.submit "OK", class: "btn ghost small" %>
+            <% end %>
+          </div>
+          <div class="right">
+            <div class="subtotal"><%= item.subtotal_brl %></div>
+            <%= button_to "Remover", cart_item_path(item), method: :delete, class: "remove",
+                  form: { style: "display:inline" } %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <aside class="summary">
+      <h3>Resumo</h3>
+      <div class="line"><span>Itens</span><span><%= @cart.total_items %></span></div>
+      <div class="line"><span>Frete</span><span>Grátis</span></div>
+      <div class="total"><span>Total</span><span><%= @cart.total_brl %></span></div>
+      <%= link_to "Finalizar compra", new_checkout_path, class: "btn block" %>
+      <%= link_to "Continuar comprando", root_path, class: "btn ghost block", style: "margin-top:10px" %>
+    </aside>
+  </div>
+<% end %>

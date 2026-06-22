@@ -1,0 +1,37 @@
+<% content_for :title, "Pedido ##{@order.id}" %>
+
+<div class="panel">
+  <div class="order-confirm">
+    <div class="check">✓</div>
+    <h1>Pedido #<%= @order.id %> confirmado</h1>
+    <p>Obrigado, <%= @order.customer_name %>! Enviaremos para:<br><%= @order.shipping_address %></p>
+    <p><span class="badge">Status: <%= @order.status %></span></p>
+  </div>
+
+  <table class="order-table">
+    <thead>
+      <tr><th>Produto</th><th class="num">Qtd</th><th class="num">Preço</th><th class="num">Subtotal</th></tr>
+    </thead>
+    <tbody>
+      <% @order_items.each do |item| %>
+        <tr>
+          <td><%= item.product.name %></td>
+          <td class="num"><%= item.quantity %></td>
+          <td class="num"><%= item.unit_price_brl %></td>
+          <td class="num"><%= item.subtotal_brl %></td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="3" class="num"><strong>Total</strong></td>
+        <td class="num"><strong><%= @order.total_brl %></strong></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <div style="margin-top:22px; display:flex; gap:12px;">
+    <%= link_to "Voltar à loja", root_path, class: "btn" %>
+    <%= link_to "Meus pedidos", orders_path, class: "btn ghost" %>
+  </div>
+</div>

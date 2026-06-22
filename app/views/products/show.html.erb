@@ -1,0 +1,14 @@
+<% content_for :title, @product.name %>
+
+<%= link_to "← Voltar à loja", root_path, class: "back" %>
+
+<div class="detail">
+  <%= product_image(@product, css_class: "detail-img") %>
+  <div>
+    <h1><%= @product.name %></h1>
+    <span class="price"><%= @product.price_brl %></span>
+    <p class="desc"><%= @product.description %></p>
+    <%= button_to "Adicionar ao carrinho", cart_items_path(product_id: @product.id),
+          params: { quantity: 1 }, class: "btn block" %>
+  </div>
+</div>

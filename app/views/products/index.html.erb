@@ -1,0 +1,32 @@
+<% content_for :title, "ShopRails — Loja" %>
+
+<section class="hero">
+  <h1>Tecnologia que move o seu setup</h1>
+  <p>Periféricos, hardware e gadgets selecionados. Adicione ao carrinho e finalize em segundos.</p>
+</section>
+
+<% if @products.any? %>
+  <div class="grid">
+    <% @products.each do |product| %>
+      <article class="product-card">
+        <%= link_to product_path(product) do %>
+          <%= product_image(product, css_class: "product-thumb") %>
+        <% end %>
+        <div class="product-body">
+          <div class="product-name"><%= link_to product.name, product_path(product) %></div>
+          <p class="product-desc"><%= truncate(product.description, length: 80) %></p>
+          <div class="product-foot">
+            <span class="price"><%= product.price_brl %></span>
+            <%= button_to "Adicionar", cart_items_path(product_id: product.id),
+                  params: { quantity: 1 }, class: "btn small" %>
+          </div>
+        </div>
+      </article>
+    <% end %>
+  </div>
+<% else %>
+  <div class="empty-state">
+    <h2>Nenhum produto cadastrado</h2>
+    <p>Rode <code>bin/rails db:seed</code> para popular a loja.</p>
+  </div>
+<% end %>
